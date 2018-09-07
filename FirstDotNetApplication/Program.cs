@@ -9,7 +9,8 @@ namespace FirstDotNetApplication
             Console.WriteLine("Hello World!");
             Console.WriteLine("Enter your name: ");
             string s = Console.In.ReadLine().ToString();
-            Console.WriteLine($"Hi {s}!");
+            Person p = new Person(s);
+            Console.WriteLine($"Hi {p.ToString}!");
 
             ExitConsole();
         }
