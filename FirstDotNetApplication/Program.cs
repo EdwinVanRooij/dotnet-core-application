@@ -6,7 +6,6 @@ namespace FirstDotNetApplication
     {
         static void Main(string[] args)
         {
-            Cat c = new Cat();
             Console.WriteLine("Hello World!");
             Console.WriteLine("Enter your name: ");
             string s = Console.In.ReadLine().ToString();

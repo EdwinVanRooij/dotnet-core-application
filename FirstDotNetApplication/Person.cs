@@ -4,7 +4,8 @@ using System.Text;
 
 namespace FirstDotNetApplication
 {
-    class Class2
+    class Person
     {
+
     }
 }
