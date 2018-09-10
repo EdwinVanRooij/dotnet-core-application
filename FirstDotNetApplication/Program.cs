@@ -7,11 +7,15 @@ namespace FirstDotNetApplication
         static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            Console.WriteLine("Enter your name: ");
-            string s = Console.In.ReadLine().ToString();
-            Person p = new Person(s);
-            Console.WriteLine($"Hi {p.ToString}!");
+            Console.WriteLine("What's your name?");
+            string name = Console.In.ReadLine().ToString();
 
+            Console.WriteLine("How old are you?");
+            string age = Console.In.ReadLine();
+
+            Person p = new Person() { Name = name, Age = age };
+            
+            Console.WriteLine($"Hi {p.ToString}!");
             ExitConsole();
         }
 
