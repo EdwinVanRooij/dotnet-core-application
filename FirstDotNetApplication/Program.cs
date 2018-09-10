@@ -6,23 +6,34 @@ namespace FirstDotNetApplication
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            Console.WriteLine("What's your name?");
-            string name = Console.In.ReadLine().ToString();
+            Console.WriteLine("Welcome to the to-do list!");
 
-            Console.WriteLine("How old are you?");
-            string age = Console.In.ReadLine();
+            TodoList todoList = new TodoList() { Title = GetString("What will be the title?") };
 
-            Person p = new Person() { Name = name, Age = age };
-            
-            Console.WriteLine($"Hi {p.ToString}!");
-            ExitConsole();
+            int n = GetInt("How many to-do items would you like to add?");
+
+            TodoItem t1 = new TodoItem()
+            {
+                Description = GetString("")
+            };
         }
 
-        private static void ExitConsole()
-        {
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+        private static string GetString(string question = "Enter a string: ")
+            {
+                Console.WriteLine(question);
+                return Console.In.ReadLine().ToString();
+            }
+
+            private static int GetInt(string question = "Enter a number: ")
+            {
+                Console.WriteLine(question);
+                return Convert.ToInt32(Console.ReadLine());
+            }
+
+            private static void ExitConsole()
+            {
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+            }
         }
     }
-}
