@@ -9,9 +9,34 @@ namespace FirstDotNetApplication
 
         static void Main(string[] args)
         {
+            StartInteraction();
+        }
+
+        private static void StartInteraction()
+        {
             Print("Welcome to Sharplist!");
+            ShowOptionMenu();
 
+            AskAgain();
+        }
 
+        private static void AskAgain()
+        {
+            string answer = GetString("Would you like to do something else? y/n");
+            if (answer.ToLower() == "y" || answer.ToLower() == "ye" || answer.ToLower() == "yes")
+            {
+                Console.Clear();
+                ShowOptionMenu();
+                AskAgain();
+            }
+            else
+            {
+                ExitConsole();
+            }
+        }
+
+        private static void ShowOptionMenu()
+        {
             // Give option menu:
             // 1: View all lists
             // 2: Create new list
@@ -22,18 +47,6 @@ namespace FirstDotNetApplication
             // 7: Mark todo y at list x as done
             // 8: Unmark todo y at list x as done
             // 9: Delete todo y at list x
-            StartInteraction();
-            int amountOfLists = GetInt("How many lists would you like to create?");
-        }
-
-        private static void StartInteraction()
-        {
-
-            ShowOptionMenu();
-        }
-
-        private static void ShowOptionMenu()
-        {
             Dictionary<int, string> options = new Dictionary<int, string>
             {
                 { 1, "View all lists" },
@@ -82,52 +95,55 @@ namespace FirstDotNetApplication
                 case 9:
                     DeleteTodoAtList();
                     break;
+                default:
+                    Print($"Could not figure out what to do with \"{choice}\"!");
+                    break;
             }
         }
 
         private static void DeleteTodoAtList()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void UnmarkTodoAtListAsDone()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void MarkTodoAtListAsDone()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void CreateNewTodoAtList()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void ViewList()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void DeleteList()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void EditListName()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void CreateList()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void ViewLists()
         {
-            throw new NotImplementedException();
+            Print("Not implemented yet!");
         }
 
         private static void Print(string message)
@@ -145,7 +161,19 @@ namespace FirstDotNetApplication
         private static int GetInt(string question = "Enter a number: ")
         {
             Print(question);
-            return Convert.ToInt32(Console.ReadLine());
+            string value;
+            int intValue = 0;
+            try
+            {
+                value = Console.ReadLine();
+                intValue = Convert.ToInt32(value);
+            }
+            catch (FormatException e)
+            {
+                Print("Not a number! Try again.");
+                intValue = GetInt(question);
+            }
+            return intValue;
         }
 
         private static void ExitConsole()
