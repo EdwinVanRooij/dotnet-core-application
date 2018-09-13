@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FirstDotNetApplication.Domain;
+using System;
 using System.Collections.Generic;
 
 namespace FirstDotNetApplication
@@ -22,17 +23,11 @@ namespace FirstDotNetApplication
 
         private static void AskAgain()
         {
-            string answer = GetString("Would you like to do something else? y/n");
-            if (answer.ToLower() == "y" || answer.ToLower() == "ye" || answer.ToLower() == "yes")
-            {
-                Console.Clear();
-                ShowOptionMenu();
-                AskAgain();
-            }
-            else
-            {
-                ExitConsole();
-            }
+            Print("- - - - - - - - - - - - - - - - - - - - - -");
+            Print("What would you like to do next?");
+            Print("- - - - - - - - - - - - - - - - - - - - - -");
+            ShowOptionMenu();
+            AskAgain();
         }
 
         private static void ShowOptionMenu()
@@ -47,6 +42,7 @@ namespace FirstDotNetApplication
             // 7: Mark todo y at list x as done
             // 8: Unmark todo y at list x as done
             // 9: Delete todo y at list x
+            // 10: Exit
             Dictionary<int, string> options = new Dictionary<int, string>
             {
                 { 1, "View all lists" },
@@ -57,7 +53,8 @@ namespace FirstDotNetApplication
                 { 6, "Create new todo at list" },
                 { 7, "Mark todo at list as done" },
                 { 8, "Unmark todo at list as done" },
-                { 9, "Delete todo at list" }
+                { 9, "Delete todo at list" },
+                { 10, "Exit" }
             };
 
             foreach (KeyValuePair<int, string> entry in options)
@@ -65,7 +62,7 @@ namespace FirstDotNetApplication
                 Print($"{entry.Key}: {entry.Value}");
             }
 
-            int choice = GetInt("What would you like to do?");
+            int choice = GetInt();
             switch (choice)
             {
                 case 1:
@@ -95,6 +92,9 @@ namespace FirstDotNetApplication
                 case 9:
                     DeleteTodoAtList();
                     break;
+                case 10:
+                    ExitConsole();
+                    break;
                 default:
                     Print($"Could not figure out what to do with \"{choice}\"!");
                     break;
@@ -103,7 +103,16 @@ namespace FirstDotNetApplication
 
         private static void DeleteTodoAtList()
         {
-            Print("Not implemented yet!");
+            int listId = GetInt("From which list?");
+            int todoId = GetInt("Which todo?");
+            if (sharpList.DeleteTodoAtList(listId, todoId))
+            {
+                Print($"Succesfully deleted todo with ID {todoId} in list with ID {listId}");
+            }
+            else
+            {
+                Print($"Could not delete todo with ID {todoId} in list with ID {listId}");
+            }
         }
 
         private static void UnmarkTodoAtListAsDone()
@@ -123,7 +132,16 @@ namespace FirstDotNetApplication
 
         private static void ViewList()
         {
-            Print("Not implemented yet!");
+            int listId = GetInt("Which list would you like to see?");
+            TodoList t = sharpList.GetList(listId);
+            if (t != null)
+            {
+                Print(t.ToString());
+            }
+            else
+            {
+                Print($"Could not find a todolist with id {listId}");
+            }
         }
 
         private static void DeleteList()
@@ -138,12 +156,16 @@ namespace FirstDotNetApplication
 
         private static void CreateList()
         {
-            Print("Not implemented yet!");
+            string title = GetString("What will be the title?");
+            sharpList.CreateList(title);
         }
 
         private static void ViewLists()
         {
-            Print("Not implemented yet!");
+            foreach (TodoList t in sharpList.TodoLists)
+            {
+                Print(t.ToString());
+            }
         }
 
         private static void Print(string message)

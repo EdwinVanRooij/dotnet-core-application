@@ -6,7 +6,15 @@ namespace FirstDotNetApplication.Domain
 {
     class TodoList
     {
+        public int Id { get; set; }
+        public string Title { get; set; }
         public List<TodoItem> TodoItems { get; set; } = new List<TodoItem>();
+
+        public TodoList(int id, string title)
+        {
+            this.Id = id;
+            this.Title = title;
+        }
 
         public List<TodoItem> GetUndoneItems()
         {
@@ -32,6 +40,16 @@ namespace FirstDotNetApplication.Domain
                 }
             }
             return result;
+        }
+
+        internal void Remove(TodoItem i)
+        {
+            TodoItems.Remove(i);
+        }
+
+        public override string ToString()
+        {
+            return $"{Title} ({Id})";
         }
     }
 }
