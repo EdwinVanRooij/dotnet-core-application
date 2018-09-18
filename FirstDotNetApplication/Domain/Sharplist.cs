@@ -48,7 +48,7 @@ namespace FirstDotNetApplication
                     return t;
                 }
             }
-            return null;
+            throw new IndexOutOfRangeException($"Could not find TodoList with ID '{listId}'");
         }
     }
 }

@@ -18,5 +18,32 @@ namespace FirstDotNetApplication.Domain
             IsDone = false;
             DueDate = dueDate;
         }
+
+        internal string IsDoneDescription()
+        {
+            if (IsDone)
+            {
+                return "is done";
+            }
+            else
+            {
+                return "is not done";
+            }
+        }
+
+        internal void UnmarkDone()
+        {
+            IsDone = false;
+        }
+
+        internal void MarkDone()
+        {
+            IsDone = true;
+        }
+
+        public override string ToString()
+        {
+            return $"{Description} ({Id}), {IsDoneDescription()}";
+        }
     }
 }

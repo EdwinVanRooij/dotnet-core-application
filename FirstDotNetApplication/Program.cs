@@ -15,7 +15,7 @@ namespace FirstDotNetApplication
 
         private static void StartInteraction()
         {
-            Print("Welcome to Sharplist!");
+            PrintView("Welcome to Sharplist!");
             ShowOptionMenu();
 
             AskAgain();
@@ -23,9 +23,9 @@ namespace FirstDotNetApplication
 
         private static void AskAgain()
         {
-            Print("- - - - - - - - - - - - - - - - - - - - - -");
-            Print("What would you like to do next?");
-            Print("- - - - - - - - - - - - - - - - - - - - - -");
+            PrintView("- - - - - - - - - - - - - - - - - - - - - -");
+            PrintView("What would you like to do next?");
+            PrintView("- - - - - - - - - - - - - - - - - - - - - -");
             ShowOptionMenu();
             AskAgain();
         }
@@ -45,21 +45,21 @@ namespace FirstDotNetApplication
             // 10: Exit
             Dictionary<int, string> options = new Dictionary<int, string>
             {
-                { 1, "View all lists" },
-                { 2, "Create new list" },
-                { 3, "Edit list name" },
-                { 4, "Delete list" },
-                { 5, "View list" },
-                { 6, "Create new todo at list" },
-                { 7, "Mark todo at list as done" },
-                { 8, "Unmark todo at list as done" },
-                { 9, "Delete todo at list" },
+                { 1, "List: View all" },
+                { 2, "List: Create new" },
+                { 3, "List: Edit name" },
+                { 4, "List: Delete" },
+                { 5, "List: View single" },
+                { 6, "Todo: Create at list" },
+                { 7, "Todo: Mark as done at list" },
+                { 8, "Todo: Unmark as done at list" },
+                { 9, "Todo: Delete at list" },
                 { 10, "Exit" }
             };
 
             foreach (KeyValuePair<int, string> entry in options)
             {
-                Print($"{entry.Key}: {entry.Value}");
+                PrintView($"{entry.Key}: {entry.Value}");
             }
 
             int choice = GetInt();
@@ -96,38 +96,64 @@ namespace FirstDotNetApplication
                     ExitConsole();
                     break;
                 default:
-                    Print($"Could not figure out what to do with \"{choice}\"!");
+                    PrintView($"Could not figure out what to do with \"{choice}\"!");
                     break;
             }
         }
 
         private static void DeleteTodoAtList()
         {
-            int listId = GetInt("From which list?");
-            int todoId = GetInt("Which todo?");
-            if (sharpList.DeleteTodoAtList(listId, todoId))
+            try
             {
-                Print($"Succesfully deleted todo with ID {todoId} in list with ID {listId}");
+                TodoList tl = GetListFromUser();
+                TodoItem ti = GetItemFromUser(tl);
+                tl.DeleteItem(ti);
             }
-            else
+            catch (IndexOutOfRangeException e)
             {
-                Print($"Could not delete todo with ID {todoId} in list with ID {listId}");
+                PrintOutput(e.Message);
             }
         }
 
         private static void UnmarkTodoAtListAsDone()
         {
-            Print("Not implemented yet!");
+            try
+            {
+                TodoList tl = GetListFromUser();
+                TodoItem ti = GetItemFromUser(tl);
+                ti.UnmarkDone();
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                PrintOutput(e.Message);
+            }
         }
 
         private static void MarkTodoAtListAsDone()
         {
-            Print("Not implemented yet!");
+            try
+            {
+                TodoList tl = GetListFromUser();
+                TodoItem ti = GetItemFromUser(tl);
+                ti.MarkDone();
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                PrintOutput(e.Message);
+            }
         }
 
         private static void CreateNewTodoAtList()
         {
-            Print("Not implemented yet!");
+            try
+            {
+                TodoList tl = GetListFromUser();
+                tl.CreateTodo(GetString("What will be the description?"));
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                PrintOutput(e.Message);
+            }
         }
 
         private static void ViewList()
@@ -136,22 +162,27 @@ namespace FirstDotNetApplication
             TodoList t = sharpList.GetList(listId);
             if (t != null)
             {
-                Print(t.ToString());
+                foreach (TodoItem ti in t.TodoItems)
+                {
+                    PrintOutput(ti.ToString());
+                }
             }
             else
             {
-                Print($"Could not find a todolist with id {listId}");
+                PrintOutput($"Could not find a todolist with id {listId}");
             }
         }
 
         private static void DeleteList()
         {
-            Print("Not implemented yet!");
+            //todo
+            PrintOutput("Not implemented yet!");
         }
 
         private static void EditListName()
         {
-            Print("Not implemented yet!");
+            //todo
+            PrintOutput("Not implemented yet!");
         }
 
         private static void CreateList()
@@ -164,11 +195,17 @@ namespace FirstDotNetApplication
         {
             foreach (TodoList t in sharpList.TodoLists)
             {
-                Print(t.ToString());
+                PrintOutput(t.ToString());
             }
         }
 
-        private static void Print(string message)
+        private static void PrintOutput(string message)
+        {
+            string time = DateTime.Now.ToString("h:mm:ss tt");
+            Console.WriteLine($"\t\t{message}");
+        }
+
+        private static void PrintView(string message)
         {
             string time = DateTime.Now.ToString("h:mm:ss tt");
             Console.WriteLine($"[{time}]: > {message}");
@@ -176,13 +213,13 @@ namespace FirstDotNetApplication
 
         private static string GetString(string question = "Enter a string: ")
         {
-            Print(question);
+            PrintView(question);
             return Console.In.ReadLine().ToString();
         }
 
         private static int GetInt(string question = "Enter a number: ")
         {
-            Print(question);
+            PrintView(question);
             string value;
             int intValue = 0;
             try
@@ -192,7 +229,7 @@ namespace FirstDotNetApplication
             }
             catch (FormatException e)
             {
-                Print("Not a number! Try again.");
+                PrintView("Not a number! Try again.");
                 intValue = GetInt(question);
             }
             return intValue;
@@ -200,9 +237,22 @@ namespace FirstDotNetApplication
 
         private static void ExitConsole()
         {
-            Print("Bye!");
-            Print("Press any key to exit...");
+            PrintView("Bye!");
+            PrintView("Press any key to exit...");
             Console.ReadKey();
         }
+
+        internal static TodoList GetListFromUser()
+        {
+            int listId = GetInt("For which list?");
+            return sharpList.GetList(listId);
+        }
+
+        internal static TodoItem GetItemFromUser(TodoList todoList)
+        {
+            int todoId = GetInt("For which item?");
+            return todoList.GetItem(todoId);
+        }
+
     }
 }

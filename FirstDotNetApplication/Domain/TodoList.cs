@@ -6,6 +6,8 @@ namespace FirstDotNetApplication.Domain
 {
     class TodoList
     {
+        private static int TodoId = 0;
+
         public int Id { get; set; }
         public string Title { get; set; }
         public List<TodoItem> TodoItems { get; set; } = new List<TodoItem>();
@@ -50,6 +52,22 @@ namespace FirstDotNetApplication.Domain
         public override string ToString()
         {
             return $"{Title} ({Id})";
+        }
+
+        internal TodoItem GetItem(int todoId)
+        {
+            return TodoItems[todoId];
+        }
+
+        internal void CreateTodo(string description)
+        {
+            TodoItem t = new TodoItem(TodoId++, description);
+            TodoItems.Add(t);
+        }
+
+        internal void DeleteItem(TodoItem ti)
+        {
+            TodoItems.Remove(ti);
         }
     }
 }
