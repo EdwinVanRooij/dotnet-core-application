@@ -62,7 +62,7 @@ namespace FirstDotNetApplication
                 PrintView($"{entry.Key}: {entry.Value}");
             }
 
-            int choice = GetInt();
+            var choice = GetInt();
             switch (choice)
             {
                 case 1:
@@ -158,7 +158,7 @@ namespace FirstDotNetApplication
 
         private static void ViewList()
         {
-            int listId = GetInt("Which list would you like to see?");
+            var listId = GetInt("Which list would you like to see?");
             TodoList t = sharpList.GetList(listId);
             if (t != null)
             {
@@ -187,7 +187,7 @@ namespace FirstDotNetApplication
 
         private static void CreateList()
         {
-            string title = GetString("What will be the title?");
+            var title = GetString("What will be the title?");
             sharpList.CreateList(title);
         }
 
@@ -201,13 +201,13 @@ namespace FirstDotNetApplication
 
         private static void PrintOutput(string message)
         {
-            string time = DateTime.Now.ToString("h:mm:ss tt");
+            var time = DateTime.Now.ToString("h:mm:ss tt");
             Console.WriteLine($"\t\t{message}");
         }
 
         private static void PrintView(string message)
         {
-            string time = DateTime.Now.ToString("h:mm:ss tt");
+            var time = DateTime.Now.ToString("h:mm:ss tt");
             Console.WriteLine($"[{time}]: > {message}");
         }
 
@@ -221,7 +221,7 @@ namespace FirstDotNetApplication
         {
             PrintView(question);
             string value;
-            int intValue = 0;
+            var intValue = 0;
             try
             {
                 value = Console.ReadLine();
@@ -242,7 +242,9 @@ namespace FirstDotNetApplication
 
         internal static TodoItem GetItemFromUser(TodoList todoList)
         {
-            int todoId = GetInt("For which item?");
+            var context = "Something";
+            context += "etohn";
+            var todoId = GetInt("For which item?");
             return todoList.GetItem(todoId);
         }
 
