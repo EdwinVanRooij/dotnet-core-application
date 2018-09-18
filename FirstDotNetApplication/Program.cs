@@ -234,14 +234,6 @@ namespace FirstDotNetApplication
             }
             return intValue;
         }
-
-        private static void ExitConsole()
-        {
-            PrintView("Bye!");
-            PrintView("Press any key to exit...");
-            Console.ReadKey();
-        }
-
         internal static TodoList GetListFromUser()
         {
             int listId = GetInt("For which list?");
@@ -254,5 +246,11 @@ namespace FirstDotNetApplication
             return todoList.GetItem(todoId);
         }
 
+        private static void ExitConsole()
+        {
+            PrintView("Bye!");
+            PrintView("Press any key to exit...");
+            Console.ReadKey();
+        }
     }
 }

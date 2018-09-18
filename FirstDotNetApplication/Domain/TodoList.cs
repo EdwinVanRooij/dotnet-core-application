@@ -56,7 +56,14 @@ namespace FirstDotNetApplication.Domain
 
         internal TodoItem GetItem(int todoId)
         {
-            return TodoItems[todoId];
+            foreach (TodoItem i in TodoItems)
+            {
+                if (i.Id == todoId)
+                {
+                    return i;
+                } 
+            }
+            throw new IndexOutOfRangeException($"Could not find a TodoItem with ID {todoId}");
         }
 
         internal void CreateTodo(string description)
